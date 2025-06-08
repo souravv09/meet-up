@@ -1,0 +1,306 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #fdeeee;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background-color: #fef4f4;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(255, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.question {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 28px;
+    color: #c0392b;
+    margin-bottom: 30px;
+    transition: opacity 0.5s ease;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
+    gap: 2px;
+    text-align: left;
+}
+
+.main-option {
+    gap: 10px; /* increased spacing between Yes/No and Pakka */
+    margin-bottom: 25px; /* extra space below */
+}
+
+.pakka-option {
+    gap: 8px; /* reduced spacing between Yes and No */
+}
+
+
+.option label {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    color: #c0392b;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s, font-weight 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.option label:hover {
+    transform: scale(1.03);
+    color: #e74c3c;
+}
+
+.option input[type="radio"] {
+    accent-color: #fdeeee;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.option input[type="radio"]:checked + span {
+    font-weight: bold;
+    font-size: 17px;
+    color: #b8322f;
+    transform: scale(1.1);
+}
+
+.fade-field {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 0;
+    width: 100%;
+    margin-left: 0;
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin-top 0.5s ease;
+}
+
+.fade-field.show {
+    opacity: 1;
+    max-height: 1000px;
+    margin-top: 10px;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.group-heading {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 20px;
+    color: #c0392b;
+    margin-bottom: 8px;
+    margin-left: 5px;
+    text-align: left;
+}
+
+.field-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.field-flex label {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 16px;
+    color: #c0392b;
+    flex: 0 0 40%;
+}
+
+/* Input/Select Styling */
+.field-flex input[type="date"],
+.field-flex input[type="text"],
+.field-flex select {
+    flex: 0 0 50%;
+    min-width: 150px;
+    max-width: 100%;
+    flex-grow: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #c0392b;
+    font-family: 'Brush Script MT', cursive;
+    font-size: 18px;
+    color: #c0392b;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover and Focus Animations */
+.field-flex input[type="date"]:hover,
+.field-flex input[type="text"]:hover,
+.field-flex select:hover,
+.field-flex input[type="date"]:focus,
+.field-flex input[type="text"]:focus,
+.field-flex select:focus {
+    transform: scale(1.0);
+    border-color: #e74c3c;
+    outline: none;
+    box-shadow: 0 0 6px rgba(231, 76, 60, 0.5);
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    margin-right: 10px;
+}
+
+.button-wrapper.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#popupOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#popupOverlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+#popupOverlay #popupContent {
+    background-color: #fff5f5;
+    padding: 25px 35px;
+    border-radius: 16px;
+    font-family: 'Brush Script MT', cursive;
+    font-size: 22px;
+    color: #c0392b;
+    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2);
+    text-align: center;
+    max-width: 80%;
+    line-height: 1.4;
+    transition: all 0.5s ease;
+}
+
+.formatted-date {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 16px;
+    color: #c0392b;
+    margin-top: 5px;
+    margin-left: 5px;
+    text-align: left;
+}
+#meetupPopupOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#meetupPopupOverlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+#meetupPopupContent {
+    background-color: #fff5f5;
+    padding: 25px 35px;
+    border-radius: 15px;
+    font-family: 'Brush Script MT', cursive;
+    font-size: 20px;
+    color: #c0392b;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+    /* Balanced size */
+    width: 80vw;
+    height: 80vh;
+    max-width: none;
+    max-height: none;
+
+    /* Flex to center content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+
+    overflow: auto;
+    position: relative;
+    cursor: auto;
+}
+
+/* Close button */
+#meetupPopupContent .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 35px;
+    color: #c0392b;
+    cursor: pointer;
+}
+
+/* To prevent clicks inside content from closing */
+#meetupPopupContent * {
+    pointer-events: auto;
+}
+
+#meetupPopupContent textarea:focus {
+    outline: none;
+    border-color: #c0392b; /* red border */
+    box-shadow: 0 0 5px rgba(192, 57, 43, 0.5); /* optional subtle glow */
+}
+
+.submit-btn:disabled {
+    background-color: pink !important;
+    color: white !important;
+    cursor: not-allowed;
+}
+
+.pakka-sending-status {
+    display: none;
+    text-align: right;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    color: #c0392b;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+
