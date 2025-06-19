@@ -1,160 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proceed Question</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Montserrat&family=Playfair+Display&family=Lobster&family=Courier+Prime&family=Dancing+Script&family=Oswald&family=Poppins&family=Pacifico&family=Cinzel&family=Raleway&family=Open+Sans&family=Nunito&family=Shadows+Into+Light&family=Indie+Flower&family=Josefin+Sans&family=Comfortaa&family=Architects+Daughter&family=Quicksand&family=Great+Vibes&family=PT+Serif&family=Source+Code+Pro&family=Fira+Code&family=Rubik&family=Amatic+SC&family=Bebas+Neue&family=Ubuntu&family=Kalam&family=Orbitron&family=Zilla+Slab&family=Merriweather&family=Crimson+Text&family=Exo+2&family=Cabin&family=Titillium+Web&family=Slabo+27px&family=Patrick+Hand&family=Fredoka&family=Inconsolata&family=Nanum+Pen+Script&family=Yeseva+One&family=Varela+Round&display=swap" rel="stylesheet">
     <!-- Link CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
 
     <!-- Firebase App (core SDK) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <!-- Firebase Firestore -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-    <!-- Add this before your script.js -->
+    <!-- html2canvas configuration -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-</head>
-<body>
+    <!-- supabase database connection -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <link rel="prefetch" href="image_bg.png" />
+  </head>
+  <body>
     <div class="container" id="questionBox">
-        <div class="question" id="mainQuestion">Do you want to proceed?</div>
-        <div class="option main-option">
+      <div class="question" id="mainQuestion">Dcotor Sahiba! milna hai tumse, milogi ?</div>
+      <div class="option main-option">
+        <label>
+          <input type="radio" name="proceed" value="yes" onclick="handleYes()"/>
+          <span>Haanji</span>
+        </label>
+
+        <!-- Yes fields block -->
+        <div id="yesFields" class="fade-field">
+          <div class="group-heading">kab milna hai...</div>
+
+          <!-- Date field -->
+          <div class="field-flex">
+            <label for="datePicker">Pick a Date:</label>
+            <input type="date" id="datePicker" onkeydown="return false;" onchange="handleDateChange()"
+              onclick="logUserActivity('Date Click', 'Clicked on Date Field')"/>
+          </div>
+          <!-- Formatted date display -->
+          <div id="formattedDate" class="formatted-date"></div>
+
+          <div class="group-heading disabled" id="kahanHeading" style="margin-top: 20px">
+            kahan milna hai...
+          </div>
+
+          <!-- Country field -->
+          <div class="field-flex disabled" id="countryInline">
+            <label for="countrySelect">Choose a Country:</label>
+            <select id="countrySelect" onchange="handleCountryChange()"
+              onclick="logUserActivity('Country Click', 'Clicked on Country Field')">
+              <option value="" disabled selected hidden>Select a Country</option>
+              <option value="India">India</option>
+              <option value="Greece">Greece</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div id="greeceRegionsTemplate" style="display: none">
+            <option value="" disabled selected hidden>Select a Region</option>
+            <option>Santorini</option>
+          </div>
+
+          <!-- State field -->
+          <div class="field-flex disabled" id="stateInline">
+            <label for="stateSelect" id="stateLabel">Choose a State:</label>
+            <select id="stateSelect" onchange="handleStateChange()">
+              <option value="" disabled selected hidden>Select a State</option>
+              <option>Andaman and Nicobar Islands</option>
+              <option>Andhra Pradesh</option>
+              <option>Arunachal Pradesh</option>
+              <option>Assam</option>
+              <option>Bihar</option>
+              <option>Chandigarh</option>
+              <option>Chhattisgarh</option>
+              <option>Dadra and Nagar Haveli and Daman and Diu</option>
+              <option>Delhi</option>
+              <option>Goa</option>
+              <option>Gujarat</option>
+              <option>Haryana</option>
+              <option>Himachal Pradesh</option>
+              <option>Jammu and Kashmir</option>
+              <option>Jharkhand</option>
+              <option>Karnataka</option>
+              <option>Kerala</option>
+              <option>Ladakh</option>
+              <option>Lakshadweep</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Manipur</option>
+              <option>Meghalaya</option>
+              <option>Mizoram</option>
+              <option>Nagaland</option>
+              <option>Odisha</option>
+              <option>Puducherry</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Sikkim</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Tripura</option>
+              <option>Uttar Pradesh</option>
+              <option>Uttarakhand</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+
+          <!-- City field -->
+          <div class="field-flex disabled" id="cityInline">
+            <label for="cityInput">City ?</label>
+            <input type="text" id="cityInput" placeholder="Type your city" oninput="handleFieldEnableFlow()"
+              onclick="logUserActivity('City Click', 'Clicked on City Field')"/>
+          </div>
+        </div>
+
+        <label>
+          <input type="radio" name="proceed" value="no" onclick="handleNo()"/>
+          <span>No</span>
+        </label>
+
+        <!-- Pakka toh -->
+        <div id="question2Block" class="fade-field" style="margin-top: 10px">
+          <div class="questionTwo">decided na? final? pakka?</div>
+          <div class="option pakka-option">
             <label>
-                <input type="radio" name="proceed" value="yes" onclick="handleYes()"> <span>Yes</span>
+              <input type="radio" name="pakka" value="yes" onclick="handlePakka()"/>
+              <span>Yes</span>
             </label>
-
-            <!-- Yes fields block -->
-            <div id="yesFields" class="fade-field">
-                <div class="group-heading">kab milna hai...</div>
-
-                <!-- Date field -->
-                <div class="field-flex">
-                    <label for="datePicker">Choose a date</label>
-                    <input type="date" id="datePicker" onkeydown="return false;" onchange="handleDateChange()" />
-                </div>
-                <!-- Formatted date display -->
-                <div id="formattedDate" class="formatted-date"></div>
-
-                <div class="group-heading disabled" id="kahanHeading" style="margin-top: 20px;">kahan milna hai...</div>
-
-                <!-- Country field -->
-                <div class="field-flex disabled" id="countryInline">
-                    <label for="countrySelect">Choose a country</label>
-                    <select id="countrySelect" onchange="handleCountryChange()">
-                        <option value="" disabled selected hidden>Choose a country</option>
-                        <option value="India">India</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <!-- State field -->
-                <div class="field-flex disabled" id="stateInline">
-                    <label for="stateSelect">Choose a state</label>
-                    <select id="stateSelect" onchange="handleStateChange()">
-                        <option value="" disabled selected hidden>Choose a state</option>
-                        <option>Andaman and Nicobar Islands</option>
-                        <option>Andhra Pradesh</option>
-                        <option>Arunachal Pradesh</option>
-                        <option>Assam</option>
-                        <option>Bihar</option>
-                        <option>Chandigarh</option>
-                        <option>Chhattisgarh</option>
-                        <option>Dadra and Nagar Haveli and Daman and Diu</option>
-                        <option>Delhi</option>
-                        <option>Goa</option>
-                        <option>Gujarat</option>
-                        <option>Haryana</option>
-                        <option>Himachal Pradesh</option>
-                        <option>Jammu and Kashmir</option>
-                        <option>Jharkhand</option>
-                        <option>Karnataka</option>
-                        <option>Kerala</option>
-                        <option>Ladakh</option>
-                        <option>Lakshadweep</option>
-                        <option>Madhya Pradesh</option>
-                        <option>Maharashtra</option>
-                        <option>Manipur</option>
-                        <option>Meghalaya</option>
-                        <option>Mizoram</option>
-                        <option>Nagaland</option>
-                        <option>Odisha</option>
-                        <option>Puducherry</option>
-                        <option>Punjab</option>
-                        <option>Rajasthan</option>
-                        <option>Sikkim</option>
-                        <option>Tamil Nadu</option>
-                        <option>Telangana</option>
-                        <option>Tripura</option>
-                        <option>Uttar Pradesh</option>
-                        <option>Uttarakhand</option>
-                        <option>West Bengal</option>
-                    </select>
-                </div>
-
-                <!-- City field -->
-                <div class="field-flex disabled" id="cityInline">
-                    <label for="cityInput">City ?</label>
-                    <input type="text" id="cityInput" placeholder="Type your city" oninput="handleFieldEnableFlow()"/>
-                </div>
+            <!-- Reason box for Pakka Yes -->
+            <div id="pakkaReasonField" class="fade-field" style="margin-left: 25px; margin-top: 8px">
+              <textarea id="pakkaReasonInput" onclick="logUserActivity('Reason ta Click', 'Clicked on Reason field')"
+                oninput="autoGrow(this)" placeholder="any specific reason? (optional)" rows="1"
+                style="
+                  padding: 8px 10px;
+                  border-radius: 6px;
+                  border: 1px solid #c0392b;
+                  font-family: 'Fredoka';
+                  font-size: 14px;
+                  color: #8f1103;
+                  width: 90%;
+                  max-height: 200px;
+                  box-sizing: border-box;
+                  resize: vertical;
+                "
+              ></textarea>
             </div>
 
             <label>
-                <input type="radio" name="proceed" value="no" onclick="handleNo()"> <span>No</span>
+              <input type="radio" name="pakka" value="no" onclick="handlePakka()"/>
+              <span>Nah!</span>
             </label>
-
-            <!-- Pakka toh -->
-            <div id="question2Block" class="fade-field" style="margin-top:10px;">
-                <div class="question">Pakka toh ?</div>
-                <div class="option pakka-option">
-                    <label>
-                        <input type="radio" name="pakka" value="yes" onclick="handlePakka()"> <span>Yes</span>
-                    </label>
-                    <!-- Reason box for Pakka Yes -->
-                    <div id="pakkaReasonField" class="fade-field" style="margin-left: 25px; margin-top: 8px;">
-                        <input type="text" id="pakkaReasonInput" placeholder="Reason (optional)" style="
-                            padding: 8px 12px;
-                            border-radius: 6px;
-                            border: 1px solid #c0392b;
-                            font-family: 'Brush Script MT', cursive;
-                            font-size: 16px;
-                            color: #c0392b;
-                            width: 90%;
-                            box-sizing: border-box;
-                        "/>
-                    </div>
-
-                    <label>
-                        <input type="radio" name="pakka" value="no" onclick="handlePakka()"> <span>No</span>
-                    </label>
-                </div>
-                <div id="pakkaSendingStatus" class="pakka-sending-status"></div>
-            </div>
+          </div>
+          <div id="pakkaSendingStatus" class="pakka-sending-status"></div>
         </div>
+      </div>
 
-        <!-- Button wrapper -->
-        <div class="button-wrapper" id="buttonWrapper">
-            <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">Submit</button>
-        </div>
-        <!-- Dummy wrapper for sending Pakka YES email -->
-        <div id="dummyWrapper" style="display:none;"></div>
+      <!-- Button wrapper -->
+      <div class="button-wrapper" id="buttonWrapper">
+        <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+          save
+        </button>
+      </div>
+      <!-- Dummy wrapper for sending Pakka YES email -->
+      <div id="dummyWrapper" style="display: none"></div>
     </div>
 
     <!-- Popup -->
     <div id="popupOverlay">
-        <div id="popupContent"></div>
+      <div id="popupContent"></div>
     </div>
 
     <!-- Meetup Popup -->
     <div id="meetupPopupOverlay">
-        <div id="meetupPopupContent">
-            <!-- Dynamic content inserted by JS -->
-        </div>
+      <div id="meetupPopupContent">
+        <!-- Dynamic content inserted by JS -->
+      </div>
     </div>
+
+    <div id="specialPopupOverlay">
+      <div id="specialPopupContent">
+        <div class="popup-background"></div>
+        <!-- background image layer -->
+        <div class="popup-inner-content">
+          <!-- Your text and button will go here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Screenshot saved messages -->
+    <div id="screenshotSavedMessage" class="top-fade-message">
+      Don't you worry Madam! A screenshot has been saved in your gallery so you don't forget the dates..
+    </div>
+
+    <div id="andThisTooMessage" class="top-fade-message">& saved this too!</div>
 
     <!-- Link JS -->
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
