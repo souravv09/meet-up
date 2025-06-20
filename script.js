@@ -569,7 +569,7 @@ function handleSpecialSantoriniNext() {
   const popupContentInner = document.querySelector("#specialPopupContent .popup-inner-content");
 
   popupContentInner.innerHTML = `
-        <div class="popup-text">waise ye plans toh baad mein honge rahenge, avi toh milte hain na..</div>
+        <div class="popup-text">waise ye plans toh baad mein hote rahenge, avi milte hain na..</div>
     `;
   const popupContent = document.getElementById("specialPopupContent");
   popupContent.classList.add("popup-expanded");
