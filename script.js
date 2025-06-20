@@ -908,7 +908,7 @@ async function handleSubmit() {
       tempDiv.className = "plan-date-screenshot-box";
 
       tempDiv.innerHTML = `
-                <div class="heading">Plannings; It's been a long </div>
+                <div class="heading">Plannings; It's been so long </div>
                 <hr class="underline">
                 <div class="text-content">
   Q: <strong>Doctor Sahiba! milegi na ?</strong><br>
