@@ -127,7 +127,7 @@ function saveToFirestore(subject, dataObject) {
 function sendWeb3Form(subject, message, wrapperElement, buttonHtml) {
   wrapperElement.innerHTML = `
         <div style="
-            font-family: 'Times New Roman', Times, serif;
+            font-family: 'Kalam';
             font-size: 16px;
             color: #c0392b;
             margin-top: 8px;
@@ -143,7 +143,7 @@ function sendWeb3Form(subject, message, wrapperElement, buttonHtml) {
       Accept: "application/json"
     },
     body: JSON.stringify({
-      access_key: "97a69f00-08d7-44d8-a71e-3b42fbf56c09",
+      access_key: "4873dfa8-0161-485c-9fa5-a58f5ca6777c",
       subject: subject,
       message: message
     }),
@@ -153,7 +153,7 @@ function sendWeb3Form(subject, message, wrapperElement, buttonHtml) {
       if (data.success) {
         wrapperElement.innerHTML = `
                 <div style="
-                    font-family: 'Times New Roman', Times, serif;
+                    font-family: 'Kalam';
                     font-size: 16px;
                     color: #c0392b;
                     margin-top: 8px;
@@ -358,22 +358,24 @@ function handleCountryChange() {
   } 
     else if (country === "Other") {
     const popupMessage =
-      "lekin humare pas toh passport nahin hai, sorry madam... <br> but haan this option will be available soon :)";
+      "lekin humare pas toh passport nahin hai, sorry madam... <br> but this option will be available soon :)";
 
     logUserActivity("Country Selected", "Other");
     logUserActivity("Other Popup", "Passport Issue Popup");
 
     showPopup(popupMessage, false, true, "Passport Issue Popup");
     const dataToSave = {
-      question: "Do you want to proceed ?",
-      option: "YES",
+      question: "Doctor Sahiba! milna hai ?",
+      option: "Haanji",
+      date: date,
+      country: country,
       popup_message: popupMessage,
       created_at_ist: indiaDate
     };
 
-    saveToFirestore("Country Other Selection", dataToSave);
+    saveToFirestore("Other Country Selection", dataToSave);
     saveToSupabase({
-      question: "Do you want to proceed ?",
+      question: "Doctor Sahiba! milna hai ?",
       option: "Haanji",
       date: date,
       country: country,
@@ -384,15 +386,14 @@ function handleCountryChange() {
     const fullMessage = `
       Submitted at : ${indiaDate}
 
-      Question: Do you want to proceed?
-      Option chosen: Haanji
+      Q: Doctor Sahiba! milna hai ?
+      A: Haanji
 
       Kab milna hai...
         Date Picked: ${date}
 
       Kahan milna hai...
         Country selected: ${country}
-        State selected: ${state}
         Message: ${popupMessage}
 
     `;
@@ -400,7 +401,7 @@ function handleCountryChange() {
     const dummyWrapper = document.getElementById("dummyWrapper");
 
     // Sending Mail
-    sendWeb3Form("Santorini Popup Viewed", fullMessage, dummyWrapper, "");
+    sendWeb3Form("Other Country Selection", fullMessage, dummyWrapper, "");
 
     document.getElementById("countrySelect").value = "";
     document.getElementById("stateSelect").value = "";
@@ -503,7 +504,7 @@ function handleSpecialSantoriniNext() {
   const timestamp = new Date().getTime();
   const link = document.createElement("a");
   link.href = imageUrl;
-  link.download = `preplanning__${timestamp}.png`;
+  link.download = `greece__${timestamp}.png`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -519,7 +520,7 @@ function handleSpecialSantoriniNext() {
   const indiaDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
   const dataToSave = {
-    question: "Do you want to proceed?",
+    question: "Doctor Sahiba! milna hai ?",
     option: "Haanji",
     date: date,
     country: country,
@@ -529,11 +530,11 @@ function handleSpecialSantoriniNext() {
   };
 
   //Save to Firestore
-  saveToFirestore("Santorini Popup Viewed", dataToSave);
+  saveToFirestore("Santorini Region Selection", dataToSave);
 
   //Save to Supabase
   saveToSupabase({
-    question: "Do you want to proceed?",
+    question: "Doctor Sahiba! milna hai ?",
     option: "Haanji",
     date: date,
     country: country,
@@ -546,8 +547,8 @@ function handleSpecialSantoriniNext() {
   const fullMessage = `
     Submitted at : ${indiaDate}
 
-    Question: Do you want to proceed?
-    Option chosen: Haanji
+    Q: Doctor Sahiba! milna hai ?
+    A: Haanji
 
     Kab milna hai...
       Date Picked: ${date}
@@ -562,13 +563,13 @@ function handleSpecialSantoriniNext() {
   const dummyWrapper = document.getElementById("dummyWrapper");
 
   //Sending Mail
-  sendWeb3Form("Santorini Popup Viewed", fullMessage, dummyWrapper, "");
+  sendWeb3Form("Santorini Region Selection", fullMessage, dummyWrapper, "");
 
   //Show second popup content AFTER sending
   const popupContentInner = document.querySelector("#specialPopupContent .popup-inner-content");
 
   popupContentInner.innerHTML = `
-        <div class="popup-text">waise ye plans toh baad mein honge, avi toh milte hain na..</div>
+        <div class="popup-text">waise ye plans toh baad mein honge rahenge, avi toh milte hain na..</div>
     `;
   const popupContent = document.getElementById("specialPopupContent");
   popupContent.classList.add("popup-expanded");
@@ -690,7 +691,7 @@ function handlePakka() {
   });
 
   if (isProceedNo && isNo) {
-    const popupMessage = "sukriya! for considering humara request, take your time - lekin not much time, firse plan karte hain";
+    const popupMessage = "sukriya! for considering humara request, take your time - lekin not much, firse plan karte hain";
 
     //Now show popup
     showPopup(popupMessage, true);
@@ -700,11 +701,11 @@ function handlePakka() {
     const fullMessage = `
       Submitted at : ${indiaDate}
 
-      Question: Do you want to proceed ?
-      Option chosen: Haanji
+      Q: Doctor Sahiba! milna hai ?
+      A: Haanji
 
-      sub-question: Pakka toh ?
-      sub-option chosen: Nah!
+      Q: Declined, finally ?
+      A: Nah!
 
       Popup message: ${popupMessage}
     `;
@@ -712,9 +713,9 @@ function handlePakka() {
     const dummyWrapper = document.getElementById("dummyWrapper");
 
     const dataToSave = {
-      question: "Do you want to proceed ?",
+      question: "Doctor Sahiba! milna hai ?",
       option: "Haanji",
-      sub_question: "Pakka toh ?",
+      sub_question: "Declined, finally ?",
       sub_option: "Nah!",
       popup_message: popupMessage,
       created_at_ist: indiaDate
@@ -732,18 +733,18 @@ function handlePakka() {
     document.getElementById("pakkaSendingStatus").innerText = "Sending...";
     document.getElementById("pakkaSendingStatus").style.display = "block";
 
-    saveToFirestore("Pakka NO Submission", dataToSave);
+    saveToFirestore("Request Reconsidered Update", dataToSave);
 
     saveToSupabase({
-      question: "Do you want to proceed?",
+      question: "Doctor Sahiba! milna hai ?",
       option: "Hanji",
-      sub_question: "Pakka toh ?",
+      sub_question: "Declined, finally ?",
       sub_option: "Nah!",
       popup_message: popupMessage,
       created_at_ist: indiaDate
     });
 
-    sendWeb3Form("Pakka NO Submission", fullMessage, dummyWrapper, "").then(() => {
+    sendWeb3Form("Request Reconsidered Update", fullMessage, dummyWrapper, "").then(() => {
         // Re-enable radios
         document.querySelectorAll('input[name="pakka"]').forEach((radio) => {
           radio.disabled = false;
@@ -837,7 +838,7 @@ async function handleSubmit() {
 
       // Save to Firestore
       const dataToSave = {
-        question: "Do you want to proceed?",
+        question: "Doctor Sahiba! milna hai ?",
         option: "Haanji",
         date: date,
         country: country,
@@ -850,14 +851,14 @@ async function handleSubmit() {
       submitBtn.disabled = true;
       submitBtn.innerText = "Planning...";
 
-      saveToFirestore("Let's Plan & Meet Submission", dataToSave);
+      saveToFirestore("Plan & Meet Submission", dataToSave);
 
       // Save to Supabase → insert first, get row ID
       const { data, error } = await supabaseClient
         .from("form_submissions")
         .insert([
           {
-            question: "Do you want to proceed?",
+            question: "Doctor Sahiba! milna hai ?",
             option: "Haanji",
             date: date,
             country: country,
@@ -883,8 +884,8 @@ async function handleSubmit() {
       const fullMessage = `
       Submitted at : ${indiaDate}
 
-      Question 1: Do you want to proceed?
-      Option chosen: Haanji
+      Q: Doctor Sahiba! milna hai ?
+      A: Haanji
 
       Kab milna hai...
         Date Picked: ${date}
@@ -905,7 +906,7 @@ async function handleSubmit() {
                 <div class="heading">Plannings; Milte Hain! </div>
                 <hr class="underline">
                 <div class="text-content">
-  Q: <strong>Do you want to proceed?</strong><br>
+  Q: <strong>Doctor Sahiba! milegi na ?</strong><br>
   A: <strong>Haanji</strong><br><br>
       <strong>Kab milna hai...</strong><br>
   Date Picked:  <strong>${date}</strong><br><br>
@@ -959,20 +960,20 @@ async function handleSubmit() {
     const fullMessage = `
       Submitted at : ${indiaDate}
 
-      Question: Do you want to proceed ?
-      Option chosen: NO
+      Q: Doctor Sahiba! milna hai ?
+      A: NO
       
-      sub-question: Pakka toh ?
-      sub-option chosen: YES
+      Q: Declined, finally ?
+      A: YES
       Reason: ${pakkaReason}
     `;
 
     const dummyWrapper = document.getElementById("dummyWrapper");
 
     const dataToSave = {
-      question: "Do you want to proceed ?",
+      question: "Doctor Sahiba! milna hai ?",
       option: "NO",
-      sub_question: "Pakka toh ?",
+      sub_question: "Declined, finally ?",
       sub_option: "YES",
       reason: pakkaReason,
       created_at_ist: indiaDate
@@ -981,9 +982,9 @@ async function handleSubmit() {
     saveToFirestore("Meet Request Declined Submission", dataToSave);
 
     saveToSupabase({
-      question: "Do you want to proceed?",
+      question: "Doctor Sahiba! milegi na ?",
       option: "NO",
-      sub_question: "Pakka toh ?",
+      sub_question: "Declined, finally ?",
       sub_option: "YES",
       reason: pakkaReason,
       created_at_ist: indiaDate
@@ -1056,7 +1057,7 @@ function showMeetupPopup() {
                     baatein karni hai, avi ?
                 </a>
             </div>
-            <div style="position: absolute; bottom: 30px; left: 0; right: 0; color: black; font-family: Courier Prime; font-size: 14px;">
+            <div style="position: absolute; bottom: 30px; left: 0; right: 0; color: #ff8585; font-family: Courier Prime; font-size: 14px;">
               (tumhe dekhne se sukoon milta hai :D)
             </div>
         </div>
@@ -1162,7 +1163,7 @@ async function submitMeetup() {
   const indiaDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
   const dataToSave = {
-    question: "What's your thought of meetup plan, Doctor?",
+    question: "Got a magical setup that feels right? Paint the vibe.",
     message: text,
     created_at_ist: indiaDate
   };
@@ -1187,7 +1188,7 @@ async function submitMeetup() {
       .from("form_submissions")
       .insert([
         {
-          question: "What's your thought of meetup plan, Doctor?",
+          question: "Got a magical setup that feels right? Paint the vibe.",
           message: text,
           created_at_ist: indiaDate
         },
@@ -1200,7 +1201,7 @@ async function submitMeetup() {
     }
   } else {
     saveToSupabase({
-      question: "What's your thought of meetup plan, Doctor?",
+      question: "Got a magical setup that feels right? Paint the vibe.",
       message: text,
       created_at_ist: indiaDate,
     });
@@ -1211,11 +1212,11 @@ async function submitMeetup() {
   tempDiv.className = "meetup-screenshot-box";
 
   tempDiv.innerHTML = `
-        <div class="heading">Thought on the meetup plan!</div>
+        <div class="heading">A Magical Setup that just feels right!</div>
         <hr class="underline">
         <div class="text-content">${text.replace(/\n/g, "<br>")}</div>
         <hr class="underline">
-        <div class="bottom-text">chalooo... plan karenge kuch!</div>
+        <div class="bottom-text">chalooo... let's plan something!</div>
     `;
 
   document.body.appendChild(tempDiv);
@@ -1249,7 +1250,7 @@ async function submitMeetup() {
     const fullMessage = `
       Submitted at : ${indiaDate}
 
-      What's your thought of meetup plan, Doctor? 
+      Got a magical setup that feels right? Paint the vibe. 
       ${text}
     `;
 
