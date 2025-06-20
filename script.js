@@ -1,3 +1,8 @@
+if (performance.navigation.type === 1 || performance.getEntriesByType("navigation")[0]?.type === "reload") {
+  const newUrl = window.location.pathname + '?nocache=' + Date.now();
+  window.location.replace(newUrl);
+}
+
 const userSessionId = "session-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
 let lastSupabaseRowId = null; // Global var to store last inserted row ID for plan a meet column
 let popupAutoCloseTimeout = null;
@@ -792,7 +797,7 @@ function showPopup(message, autoSwitchToYes = false, noReload = false, popupLabe
     } else if (!noReload) {
       // Only reload if noReload is false
       setTimeout(() => {
-        location.reload();
+        window.location.href = window.location.pathname + '?nocache=' + Date.now();
       }, 500);
     }
   };
@@ -1120,7 +1125,7 @@ function hideMeetupPopup() {
 
   if (isWhatsappOnly || isIdealMeetup) {
     setTimeout(() => {
-      location.reload();
+      window.location.href = window.location.pathname + '?nocache=' + Date.now();
     }, 500); // Give time for popup animation to fade
   }
 }
