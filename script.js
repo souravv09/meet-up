@@ -1,3 +1,8 @@
+if (performance.navigation.type === 1 || performance.getEntriesByType("navigation")[0]?.type === "reload") {
+  const newUrl = window.location.pathname + '?nocache=' + Date.now();
+  window.location.replace(newUrl);
+}
+
 const userSessionId = "session-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
 let lastSupabaseRowId = null; // Global var to store last inserted row ID for plan a meet column
 let popupAutoCloseTimeout = null;
@@ -500,7 +505,7 @@ function handleSpecialSantoriniNext() {
   if (nextButton) nextButton.style.display = "none";
 
   // Triggering image download
-  const imageUrl = "image9.jpeg";
+  const imageUrl = "image9.jpeg?t=" + new Date().getTime();
   const timestamp = new Date().getTime();
   const link = document.createElement("a");
   link.href = imageUrl;
@@ -510,7 +515,7 @@ function handleSpecialSantoriniNext() {
   document.body.removeChild(link);
 
   logUserActivity("Screenshot Download", "Santorini Details Screenshot Downloaded");
-  showAndThisTooMessage("saved the image, so you can follow these steps ;)");
+  showAndThisTooMessage("saved this image, check your gallery, so you don't forget to text me ;)");
 
   //PREPARE DATA TO SAVE
   const date = document.getElementById("formattedDate").innerText;
@@ -569,7 +574,7 @@ function handleSpecialSantoriniNext() {
   const popupContentInner = document.querySelector("#specialPopupContent .popup-inner-content");
 
   popupContentInner.innerHTML = `
-        <div class="popup-text">waise ye plans toh baad mein honge rahenge, avi toh milte hain na..</div>
+        <div class="popup-text">waise ye plans toh baad mein hote rahenge, avi milte hain na..</div>
     `;
   const popupContent = document.getElementById("specialPopupContent");
   popupContent.classList.add("popup-expanded");
@@ -792,7 +797,7 @@ function showPopup(message, autoSwitchToYes = false, noReload = false, popupLabe
     } else if (!noReload) {
       // Only reload if noReload is false
       setTimeout(() => {
-        location.reload();
+        window.location.href = window.location.pathname + '?nocache=' + Date.now();
       }, 500);
     }
   };
@@ -903,7 +908,7 @@ async function handleSubmit() {
       tempDiv.className = "plan-date-screenshot-box";
 
       tempDiv.innerHTML = `
-                <div class="heading">Plannings; Milte Hain! </div>
+                <div class="heading">Plannings; It's been a long </div>
                 <hr class="underline">
                 <div class="text-content">
   Q: <strong>Doctor Sahiba! milegi na ?</strong><br>
@@ -915,7 +920,7 @@ async function handleSubmit() {
   State   ?  <strong>${state}</strong><br>
   City    ?   <strong>${city}</strong><br><br>
   <hr class="underline">
-  <div class="bottom-text">Now don't change the plan</div>
+  <div class="bottom-text">jaldi milte hain</div>
                 </div>
             `;
 
@@ -1001,18 +1006,18 @@ async function handleSubmit() {
       pakkaReason === "empty" ? "lekin kyun ? the answer will be incomplete forever." : pakkaReason;
 
     tempDiv.innerHTML = `
-        <div class="heading">Don't want to Meet</div>
+        <div class="heading">Didn't want to Meet ?</div>
         <hr class="underline">
         <div class="text-content">${reasonTextForScreenshot.replace(/\n/g, "<br>")}</div>
         <hr class="underline">
-        <div class="bottom-text">chalo, theek hai.</div>
+        <div class="bottom-text">chalo, badhiya hai.</div>
     `;
 
     document.body.appendChild(tempDiv);
 
     html2canvas(tempDiv).then((canvas) => {
       const link = document.createElement("a");
-      const timestamp = new Date().getTime();
+      const timestamp = Date.now();
       link.href = canvas.toDataURL("image/png");
       link.download = `neverthought_${timestamp}.png`;
       link.click();
@@ -1052,12 +1057,12 @@ function showMeetupPopup() {
             </div>
 
             <div style="margin-top: 10px;">
-                <a href="https://wa.me/919709909629?text=Hi Patient... missed me ?" target="_blank" onclick="logUserActivity('Whatsapp Click', 'Clicked ta WhatsApp link')" style="text-decoration: none; color: #25D366; font-family: 'Great Vibes'; letter-spacing: 1px; word-spacing: 1px; font-size: 22px;">
+                <a href="https://wa.me/919709909629?text=Hiiii Patientt... missing me ?" target="_blank" onclick="logUserActivity('Whatsapp Click', 'Clicked ta WhatsApp link')" style="text-decoration: none; color: #25D366; font-family: 'Great Vibes'; letter-spacing: 1px; word-spacing: 1px; font-size: 22px;">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 24px; vertical-align: middle; margin-right: 8px;">
                     baatein karni hai, avi ?
                 </a>
             </div>
-            <div style="position: absolute; bottom: 30px; left: 0; right: 0; color: #ff8585; font-family: Courier Prime; font-size: 14px;">
+            <div id="bottomMeetupNote" style="position: absolute; bottom: 30px; left: 0; right: 0; color: #ff8585; font-family: Courier Prime; font-size: 14px; transition: opacity 0.5s ease;">
               (tumhe dekhne se sukoon milta hai :D)
             </div>
         </div>
@@ -1094,6 +1099,23 @@ function showMeetupPopup() {
       setupMeetupTypingLogger();
     }
   }, 150);
+
+   // Auto-hide note if link overlaps
+  const interval = setInterval(() => {
+    const note = document.getElementById("bottomMeetupNote");
+    const link = document.getElementById("whatsappWrapper");
+    if (!note || !link) return;
+
+    const noteRect = note.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+
+    if (noteRect.top <= linkRect.bottom + 5) {
+      note.style.opacity = "0";
+    } else {
+      note.style.opacity = "1";
+    }
+  }, 400);
+
   logUserActivity("Meetup ta Popup", "Ideal Meetup Popup");
 }
 
@@ -1120,7 +1142,7 @@ function hideMeetupPopup() {
 
   if (isWhatsappOnly || isIdealMeetup) {
     setTimeout(() => {
-      location.reload();
+      window.location.href = window.location.pathname + '?nocache=' + Date.now();
     }, 500); // Give time for popup animation to fade
   }
 }
@@ -1216,7 +1238,7 @@ async function submitMeetup() {
         <hr class="underline">
         <div class="text-content">${text.replace(/\n/g, "<br>")}</div>
         <hr class="underline">
-        <div class="bottom-text">chalooo... let's plan something!</div>
+        <div class="bottom-text">let's plan something!</div>
     `;
 
   document.body.appendChild(tempDiv);
@@ -1279,11 +1301,11 @@ function showWhatsappOnlyPopup() {
         <div id="meetup-popup-marker" data-popup-type="ideal-meetup"></div>
         <div class="close-btn" onclick="logUserActivity('Popup Closed', 'Whatsapp Popup Closed Manually'); hideMeetupPopup()">&times;</div>
         <div style="text-align:center;">
-          <div style="font-family: Courier Prime; font-size: 14px; color: black; margin-bottom: 8px;">(I won't disturb you)</div>
+          <div style="font-family: Courier Prime; font-size: 14px; color: black; margin-bottom: 8px;">(I won't disturb you ab.)</div>
 
             <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
             <div style="margin-top: 10px;">
-                <a href="https://wa.me/919709909629?text=Hi... wait for sometime, maybe things will fix.. or not!" target="_blank" onclick="logUserActivity('Whatsapp Click', 'Clicked dnt WhatsApp link')" style="text-decoration: none; color: #25D366; font-family: 'Great Vibes'; letter-spacing: 1px; word-spacing: 1px; font-size: 22px;">
+                <a href="https://wa.me/919709909629?text=Hi... as-usual I'm busy these days so..." target="_blank" onclick="logUserActivity('Whatsapp Click', 'Clicked dnt WhatsApp link')" style="text-decoration: none; color: #25D366; font-family: 'Great Vibes'; letter-spacing: 1px; word-spacing: 1px; font-size: 22px;">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 24px; vertical-align: middle; margin-right: 8px;">
                     fir baatein nahi hi karte?
                 </a>
@@ -1352,7 +1374,7 @@ window.addEventListener("beforeunload", function (e) {
   const hasMeetupInput = !!document.getElementById("meetupInput");
 
   const meetupPopupContent = document.getElementById("meetupPopupContent")?.innerHTML || "";
-  const whatsappPopupActive = meetupPopupContent.includes("don't wanna talk");
+  const whatsappPopupActive = meetupPopupContent.includes("better?");
 
   if (
     santoriniVisible ||
